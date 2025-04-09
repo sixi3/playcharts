@@ -1,103 +1,191 @@
-import Image from "next/image";
+'use client'; // Mark this component as a Client Component
+
+import Header from "@/components/layout/Header";
+import PieChartEditor from "@/components/charts/pie/PieChartEditor";
+import PieChartPreview from "@/components/charts/pie/PieChartPreview";
+import CodePanel from "@/components/shared/CodePanel";
+import React, { useState } from 'react';
+import { Box, Paper } from '@mui/material'; // Import Box and Paper for layout/styling
+
+// Define the type for a single segment
+export interface Segment {
+  id: string; // Unique ID for React keys
+  label: string;
+  value: number;
+  color: string;
+}
+
+// Define the type for styling properties
+export interface PieChartStyles {
+  innerRadius: number;
+  outerRadius: number;
+  paddingAngle: number;
+  cornerRadius: number;
+  startAngle: number;
+  endAngle: number; // Added endAngle as it's common for pie charts
+}
+
+// Define the type for other chart options
+export interface ChartOptions {
+  showLegend?: boolean;
+}
+
+// Function to generate a simple unique ID
+const generateId = () => `_${Math.random().toString(36).substr(2, 9)}`;
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  // State for the segments
+  const [segments, setSegments] = useState<Segment[]>([
+    { id: generateId(), label: 'Segment 1', value: 10, color: '#03C171' },
+    { id: generateId(), label: 'Segment 2', value: 20, color: '#0068CC' },
+    { id: generateId(), label: 'Segment 3', value: 15, color: '#FF0000' }, // Mismatched color from image, corrected
+  ]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  // State for styling properties
+  const [styles, setStyles] = useState<PieChartStyles>({
+    innerRadius: 30,
+    outerRadius: 100,
+    paddingAngle: 1,
+    cornerRadius: 5,
+    startAngle: 0,
+    endAngle: 360,
+  });
+
+  // State for other chart options
+  const [chartOptions, setChartOptions] = useState<ChartOptions>({
+    showLegend: false
+  });
+
+  // Function to add a new segment
+  const addSegment = () => {
+    setSegments([
+      ...segments,
+      { id: generateId(), label: `Segment ${segments.length + 1}`, value: 10, color: '#CCCCCC' },
+    ]);
+  };
+
+  // Function to remove a segment by id
+  const removeSegment = (id: string) => {
+    setSegments(segments.filter(segment => segment.id !== id));
+  };
+
+  // Function to update a specific segment
+  const updateSegment = (id: string, updatedValues: Partial<Omit<Segment, 'id'>>) => {
+    setSegments(segments.map(segment =>
+      segment.id === id ? { ...segment, ...updatedValues } : segment
+    ));
+  };
+
+  // --- Styling Functions ---
+  const updateStyle = (updatedValues: Partial<PieChartStyles>) => {
+    setStyles(prevStyles => ({ ...prevStyles, ...updatedValues }));
+  };
+
+  // Function to update chart options (like the switch)
+  const updateChartOption = (updatedValues: Partial<ChartOptions>) => {
+    setChartOptions(prevOptions => ({ ...prevOptions, ...updatedValues }));
+  };
+
+  return (
+    // Outermost container for full viewport height and padding
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', bgcolor: 'background.default' }}>
+      <Header />
+      {/* Main content area - Allow scroll on XS, hide on LG */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1, // Takes remaining vertical space
+          display: 'flex',
+          flexDirection: { xs: 'column', lg: 'row' },
+          gap: { xs: 2, sm: 3 },
+          p: { xs: 2, sm: 3 },
+          overflowX: 'hidden', // Prevent horizontal scroll
+          overflowY: { xs: 'auto', lg: 'hidden' } // Allow vertical scroll only on small screens
+          // Remove fixed height calculation, rely on flexGrow
+        }}
+      >
+        {/* Left Column - Adjust height behavior */}
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: { xs: 2, sm: 3 },
+          flexBasis: { xs: 'auto', lg: '66%' }, // Basis auto on xs
+          flexGrow: { lg: 1 }, // Only grow on lg
+          height: { lg: '100%' }, // Full height only on lg
+          // No overflow hidden here
+        }}>
+          {/* Live Preview Panel */}
+          <Paper
+            elevation={2}
+            sx={{
+              p: 0,
+              flexGrow: { lg: 1 },
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: { xs: 300, sm: 400 },
+              overflow: 'hidden'
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+            <PieChartPreview
+              segments={segments}
+              styles={styles}
+              options={chartOptions}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </Paper>
+
+          {/* Code Panel */}
+          <Paper
+            elevation={2}
+            sx={{
+              p: 3,
+              minHeight: 200,
+              maxHeight: { xs: 300, lg: '40%' }, // Allow slightly more height on xs if needed
+              display: 'flex',
+              flexDirection: 'column',
+              flexShrink: 0
+            }}
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <CodePanel
+              segments={segments}
+              styles={styles}
+              options={chartOptions}
+            />
+          </Paper>
+        </Box>
+
+        {/* Right Column (Editor Panel) - Adjust height behavior */}
+        <Box sx={{
+          flexBasis: { xs: 'auto', lg: '34%' }, // Basis auto on xs
+          flexGrow: { lg: 1 }, // Only grow on lg
+          height: { lg: '100%' }, // Full height only on lg
+          minWidth: 0, // Prevent content from forcing width expansion
+          // No overflow hidden here
+        }}>
+          {/* Editor Panel Paper - Height auto on xs, scroll internal on lg */}
+          <Paper
+            elevation={2}
+            sx={{
+              p: 3,
+              height: { lg: '100%' }, // Full height only on lg
+              overflow: { lg: 'auto' } // Internal scroll only on lg
+              // On xs, the main container scrolls, so internal scroll is less critical
+            }}
+          >
+            <PieChartEditor
+              segments={segments}
+              styles={styles}
+              options={chartOptions}
+              onAddSegment={addSegment}
+              onRemoveSegment={removeSegment}
+              onUpdateSegment={updateSegment}
+              onUpdateStyle={updateStyle}
+              onUpdateOption={updateChartOption}
+            />
+          </Paper>
+        </Box>
+      </Box>
+    </Box>
   );
 }

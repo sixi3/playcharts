@@ -1,0 +1,90 @@
+[x] TASK: Setup Next.js & MUI X-Charts
+    Description:
+     - [x] Initialize a Next.js project.
+     - [x] Install Material UI (@mui/material), MUI X-Charts (@mui/x-charts), or Recharts if preferred.
+     - [x] Confirm folder structure as outlined in the PRD.
+    Notes: Use 'npx create-next-app' to start. Possibly use TypeScript for type safety.
+    Comments: Using src/components/charts/[type], src/utils/[type] structure.
+
+[x] TASK: Create Main Layout (index.tsx or equivalent in App Router)
+    Description:
+     - [x] Include top navigation or header for PlayCharts brand.
+     - [x] Split layout into three main sections:
+       1) Live Preview (left or center)
+       2) Editor Panel (segments & styling) on the right
+       3) Updated Code Panel (bottom-left or bottom area)
+    Notes: Ensure layout is responsive. The screenshot shows Preview in the center, Editor on the right, Code Panel in bottom-left.
+    Comments: Basic layout implemented in src/app/page.tsx using Header and Tailwind Flexbox.
+
+[ ] TASK: Build Pie Chart Segments Management UI
+    Description:
+     - [x] In src/components/charts/pie/PieChartEditor.tsx, allow users to add/remove segments.
+     - [x] Each segment: label (text), color (picker), value (numeric).
+     - [x] Validate input to avoid negative or NaN values.
+    Notes: Keep segment data in a shared state (context or useState).
+    Comments: Implemented using useState in page.tsx and passing props to PieChartEditor. Basic UI created.
+
+[x] TASK: Build Pie Chart Styling Controls
+    Description:
+     - [x] In src/components/charts/pie/PieChartEditor.tsx, add sliders for inner radius, outer radius, padding angle, corner radius, start angle.
+     - [x] Sync changes to shared state so PieChartPreview and CodePanel update in real time.
+    Notes: Use MUI Slider with sensible min/max defaults.
+    Comments: Implemented using useState in page.tsx and passing props. Used standard range inputs for now.
+
+[x] TASK: Build PieChartPreview
+    Description:
+     - [x] Create src/components/charts/pie/PieChartPreview.tsx.
+     - [x] Render the Pie Chart with the updated props from the Editor state.
+     - [x] Confirm real-time reactivity (onChange => re-render).
+     - [ ] Consider theming (use MUI theme or custom styling).
+    Notes: If using MUI X-Charts PieChart, import from '@mui/x-charts/PieChart'.
+    Comments: Implemented PieChartPreview component using @mui/x-charts and linked it to state in page.tsx.
+
+[x] TASK: Implement the New Code Panel Design
+    Description:
+     - [x] Create CodePanel.tsx that shows:
+       1) [x] A real-time JSX code snippet (import statements + <PieChart ... />).
+       2) [x] Copy Code button. (Placeholder added)
+       3) [x] Download Code button. (Placeholder added)
+     - [x] Place it in the bottom-left container or as shown in the updated design.
+    Notes: Use a syntax highlighter library (e.g., react-syntax-highlighter) and 'copy-to-clipboard'.
+    Comments: Basic CodePanel created, uses generatePieChartCode utility. Buttons are placeholders. Syntax highlighting pending.
+
+[x] TASK: Generate Pie Chart Code Snippet Utility
+    Description:
+     - [x] Write src/utils/pie/generatePieChartCode.ts to produce a string of valid JSX/TSX.
+     - [x] The snippet should reflect current Pie Chart segments array, styling props, etc.
+    Notes: Must handle dynamic segment data (labels, colors, values) and styling (radius, angle, etc.).
+    Comments: Function created and integrated with CodePanel.
+
+[x] TASK: Link Editor to CodePanel
+    Description:
+     - [x] Ensure changes in Editor state automatically update the snippet in CodePanel.
+     - [x] Possibly wrap in a context or pass props down.
+    Notes: Keep performance in mind; avoid excessive re-renders.
+    Comments: Linking achieved by passing shared state (segments, styles) from page.tsx down to both Editor and CodePanel.
+
+[x] TASK: Add Copy & Download Functionality
+    Description:
+     - [x] Implement a "Copy" button that copies the code snippet to the clipboard.
+     - [x] Implement a "Download" button that saves a .jsx file with the snippet.
+    Notes: Provide file naming or default 'PlayChartsPieChart.jsx'.
+    Comments: Implemented using copy-to-clipboard and Blob/URL download method. Added react-syntax-highlighter for display.
+
+[ ] TASK: Testing & QA
+    Description:
+     - [ ] Write tests for src/utils/pie/generatePieChartCode.ts.
+     - [ ] Perform integration tests on Editor <-> Preview <-> CodePanel.
+     - [ ] Manual test with different segment counts and style values.
+    Notes: Check edge cases like zero segments, negative values, or color input errors.
+    Comments:
+
+[ ] TASK: Refine UI Styling to Match Figma Design
+    Description: Adjust component styles, layout, fonts, and colors to align with the reference Figma file.
+    Sub-tasks:
+     - [x] Setup MUI Theme & Global Styles (Fonts, Background)
+     - [x] Refine Header Component
+     - [x] Refine Editor Panel (Segment Rows, Sliders, Buttons, Switch)
+     - [x] Refine Code Panel (Code Area, Buttons)
+     - [ ] Final Review & Tweaks
+    Comments: Target: https://www.figma.com/design/U8ByWXJ8HT1Xm0Dg0Y4vF1/Design2Charts?node-id=1-2 
