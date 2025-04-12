@@ -19,7 +19,11 @@ const Header = () => {
         borderColor: 'divider', // Use theme divider color
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: 'xl', mx: 'auto' }}>
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between', 
+      }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {/* Logo container with fixed dimensions */}
           <Box 

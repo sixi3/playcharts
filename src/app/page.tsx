@@ -109,14 +109,14 @@ export default function Home() {
           display: 'flex',
           flexDirection: 'column',
           gap: { xs: 2, sm: 3 },
-          flexBasis: { xs: 'auto', lg: '66%' }, // Basis auto on xs
+          flexBasis: { xs: 'auto', lg: '30%' }, // Changed from 66% to 30%
           flexGrow: { lg: 1 }, // Only grow on lg
           height: { lg: '100%' }, // Full height only on lg
           // No overflow hidden here
         }}>
           {/* Live Preview Panel */}
           <Paper
-            elevation={2}
+            elevation={0}
             sx={{
               p: 0,
               flexGrow: { lg: 1 },
@@ -157,7 +157,7 @@ export default function Home() {
 
         {/* Right Column (Editor Panel) - Adjust height behavior */}
         <Box sx={{
-          flexBasis: { xs: 'auto', lg: '34%' }, // Basis auto on xs
+          flexBasis: { xs: 'auto', lg: '70%' }, // Changed from 34% to 70%
           flexGrow: { lg: 1 }, // Only grow on lg
           height: { lg: '100%' }, // Full height only on lg
           minWidth: 0, // Prevent content from forcing width expansion

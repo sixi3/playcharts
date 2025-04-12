@@ -67,7 +67,18 @@ const PieChartEditor: React.FC<PieChartEditorProps> = ({
       {/* Segments Section */}
       <Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h6" component="h3">Data</Typography>
+          <Typography 
+            variant="h6" 
+            component="h3"
+            sx={{ 
+              color: 'text.primary',
+              fontWeight: 600,
+              fontSize: '1.1rem',
+              letterSpacing: '0.5px'
+            }}
+          >
+            Data
+          </Typography>
           {/* Options Container */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <FormControlLabel
@@ -77,7 +88,7 @@ const PieChartEditor: React.FC<PieChartEditorProps> = ({
                   onChange={handleOptionChange}
                   name="showLegend"
                   size="small"
-                  sx={{
+                  sx={(theme) => ({
                     padding: 0,
                     width: 40,
                     height: 24,
@@ -96,31 +107,39 @@ const PieChartEditor: React.FC<PieChartEditorProps> = ({
                         },
                       },
                       '&.Mui-focusVisible .MuiSwitch-thumb': {
+                        color: 'secondary.main',
+                        boxShadow: '0 4px 4px 0 rgba(0,0,0,.25)',
                       },
                       '&.Mui-disabled .MuiSwitch-thumb': {
-                        color: (theme) => theme.palette.grey[100],
+                        color: theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
                       },
                       '&.Mui-disabled + .MuiSwitch-track': {
-                         backgroundColor: '#EAEEF0',
-                         opacity: (theme) => theme.palette.mode === 'light' ? 0.7 : 0.3,
+                        opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
                       },
                     },
                     '& .MuiSwitch-thumb': {
                       boxSizing: 'border-box',
-                      boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.15)',
                       width: 18,
                       height: 18,
+                      boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.15)',
+                      ...(theme.palette.mode === 'dark' && {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        backdropFilter: 'blur(8px)',
+                      }),
                     },
                     '& .MuiSwitch-track': {
                       borderRadius: 24 / 2,
-                      border: `1px solid #CFD6DA`,
-                      backgroundColor: '#EAEEF0',
+                      border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : '#CFD6DA'}`,
+                      backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : '#EAEEF0',
                       opacity: 1,
-                      transition: (theme) => theme.transitions.create(['background-color', 'border'], {
+                      transition: theme.transitions.create(['background-color', 'border'], {
                         duration: 500,
                       }),
+                      ...(theme.palette.mode === 'dark' && {
+                        backdropFilter: 'blur(8px)',
+                      }),
                     },
-                  }}
+                  })}
                 />
               }
               label="Legend"
@@ -327,7 +346,19 @@ const PieChartEditor: React.FC<PieChartEditorProps> = ({
 
       {/* Styling Section */}
       <Box>
-        <Typography variant="h6" component="h3" mb={2}>Styling</Typography>
+        <Typography 
+          variant="h6" 
+          component="h3" 
+          mb={2}
+          sx={{ 
+            color: 'text.primary',
+            fontWeight: 500,
+            fontSize: '1.1rem',
+            letterSpacing: '0.5px'
+          }}
+        >
+          Styling
+        </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
           {(Object.keys(styles) as Array<keyof PieChartStyles>).map((key) => {
             const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
@@ -345,36 +376,62 @@ const PieChartEditor: React.FC<PieChartEditorProps> = ({
                   <Typography variant="body2" sx={{ color: 'text.secondary' }} id={`${key}-slider-label`}>
                     {label}
                   </Typography>
-                  <Box sx={(theme) => ({
+                  <Box sx={{
                     border: '1px solid',
-                    borderColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.3)' : theme.palette.divider,
+                    borderColor: 'divider',
                     borderRadius: '6px',
-                    px: 1.5,
-                    py: 0.25,
-                    minWidth: 40,
-                    textAlign: 'center',
-                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.15)' : '#FFFFFF',
-                    backdropFilter: theme.palette.mode === 'dark' ? 'blur(10px)' : 'none',
-                    transition: theme.transitions.create(['background-color', 'border-color', 'backdrop-filter'], {
-                      duration: theme.transitions.duration.short,
-                    }),
+                    width: 40,
+                    height: 40,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'background.paper',
+                    transition: 'all 0.2s ease-in-out',
                     '&:hover': {
-                      backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.25)' : theme.palette.action.hover,
-                      borderColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.7)' : theme.palette.divider,
+                      backgroundColor: 'action.hover',
+                      borderColor: 'divider',
                     }
-                  })}>
-                    <Typography 
-                      variant="caption" 
-                      sx={(theme) => ({ 
-                        fontWeight: 500, 
-                        color: theme.palette.mode === 'dark' ? '#FFFFFF' : theme.palette.text.primary, 
-                        transition: theme.transitions.create(['color'], {
-                          duration: theme.transitions.duration.short,
-                        }),
-                      })}
-                    >
-                      {styles[key]}
-                    </Typography>
+                  }}>
+                    <TextField
+                      value={styles[key]}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '') {
+                          handleStyleChange(key, 0);
+                        } else {
+                          const numValue = parseFloat(value);
+                          if (!isNaN(numValue) && numValue >= min && numValue <= max) {
+                            handleStyleChange(key, numValue);
+                          }
+                        }
+                      }}
+                      variant="standard"
+                      size="small"
+                      sx={{
+                        width: '100%',
+                        '& .MuiInputBase-root': {
+                          '&:before, &:after': {
+                            display: 'none',
+                          },
+                          height: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        },
+                        '& .MuiInputBase-input': {
+                          padding: 0,
+                          textAlign: 'center',
+                          fontSize: '0.75rem',
+                          fontWeight: 500,
+                          height: '100%',
+                        },
+                      }}
+                      inputProps={{
+                        min,
+                        max,
+                        step,
+                      }}
+                    />
                   </Box>
                 </Box>
                 {/* Slider - Updated Styles */}

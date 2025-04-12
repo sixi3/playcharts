@@ -100,25 +100,25 @@ const CodePanel: React.FC<CodePanelProps> = ({ segments, styles, options }) => {
       <Box sx={{ display: 'flex', gap: 2, flexShrink: 0 }}>
         <Button
           variant="outlined"
-          startIcon={<ContentCopy sx={{ color: '#4F6370' }} />}
+          startIcon={<ContentCopy sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#FFFFFF' : '#4F6370' }} />}
           onClick={handleCopy}
           disabled={copyButtonText === 'Copied!'}
           fullWidth
-          sx={{
+          sx={(theme) => ({
             py: '14px',
             borderColor: 'divider',
-            color: '#4F6370',
+            color: theme.palette.mode === 'dark' ? '#FFFFFF' : '#4F6370',
             bgcolor: 'background.paper',
             borderRadius: '12px',
             transition: 'all 0.3s ease-in-out',
             boxShadow: 'none',
             '&:hover': {
-              borderColor: 'grey.400',
-              bgcolor: 'grey.50',
+              borderColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'grey.400',
+              bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'grey.50',
               transform: 'translateY(-1px)',
               boxShadow: 'rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px'
             }
-          }}
+          })}
         >
           {copyButtonText}
         </Button>
@@ -128,19 +128,19 @@ const CodePanel: React.FC<CodePanelProps> = ({ segments, styles, options }) => {
           onClick={handleDownload}
           disableElevation
           fullWidth
-          sx={{
+          sx={(theme) => ({
             py: '15px',
-            bgcolor: '#2EC183',
+            bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : '#2CA0BA',
             color: '#FFFFFF',
             borderRadius: '12px',
             transition: 'all 0.3s ease-in-out',
             boxShadow: 'none',
             '&:hover': {
-              bgcolor: '#25a870',
+              bgcolor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : '#25a870',
               transform: 'translateY(-1px)',
               boxShadow: 'rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px'
             }
-          }}
+          })}
         >
           Download Code
         </Button>

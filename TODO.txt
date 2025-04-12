@@ -16,7 +16,7 @@
     Notes: Ensure layout is responsive. The screenshot shows Preview in the center, Editor on the right, Code Panel in bottom-left.
     Comments: Basic layout implemented in src/app/page.tsx using Header and Tailwind Flexbox.
 
-[ ] TASK: Build Pie Chart Segments Management UI
+[x] TASK: Build Pie Chart Segments Management UI
     Description:
      - [x] In src/components/charts/pie/PieChartEditor.tsx, allow users to add/remove segments.
      - [x] Each segment: label (text), color (picker), value (numeric).
@@ -79,12 +79,12 @@
     Notes: Check edge cases like zero segments, negative values, or color input errors.
     Comments:
 
-[ ] TASK: Refine UI Styling to Match Figma Design
+[x] TASK: Refine UI Styling to Match Figma Design
     Description: Adjust component styles, layout, fonts, and colors to align with the reference Figma file.
     Sub-tasks:
      - [x] Setup MUI Theme & Global Styles (Fonts, Background)
      - [x] Refine Header Component
      - [x] Refine Editor Panel (Segment Rows, Sliders, Buttons, Switch)
      - [x] Refine Code Panel (Code Area, Buttons)
-     - [ ] Final Review & Tweaks
-    Comments: Target: https://www.figma.com/design/U8ByWXJ8HT1Xm0Dg0Y4vF1/Design2Charts?node-id=1-2 
+     - [x] Final Review & Tweaks
+    Comments: Target: https://www.figma.com/design/U8ByWXJ8HT1Xm0Dg0Y4vF1/Design2Charts?node-id=1-2
