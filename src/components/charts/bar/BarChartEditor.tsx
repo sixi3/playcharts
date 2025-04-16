@@ -6,7 +6,6 @@ import {
   IconButton,
   Typography,
   Paper,
-  Stack,
   Slider,
   FormControlLabel,
   Switch,

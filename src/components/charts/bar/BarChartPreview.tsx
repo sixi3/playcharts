@@ -1,6 +1,6 @@
-import React, { useRef, useCallback, useState } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { BarDataPoint, BarChartStyles } from '@/app/page';
 import { toPng, toSvg } from 'html-to-image';
 import PreviewHeader from '../common/PreviewHeader';

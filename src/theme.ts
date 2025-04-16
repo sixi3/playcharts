@@ -10,7 +10,19 @@ const commonSettings = {
     borderRadius: 12,
   },
   typography: {
-    fontFamily: 'var(--font-geist-sans)',
+    // Use -apple-system to target SF Pro on Apple platforms, with fallbacks
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
     h6: {
       fontWeight: 600,
     },

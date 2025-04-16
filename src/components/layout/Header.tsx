@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Typography, IconButton, AppBar, Toolbar, Select, MenuItem } from '@mui/material'; // Add IconButton and Select
-import Image from 'next/image';
 import { useThemeMode } from '@/components/ThemeRegistry/ThemeRegistry'; // Import the context hook
 import { Brightness4, Brightness7 } from '@mui/icons-material'; // Import icons
 

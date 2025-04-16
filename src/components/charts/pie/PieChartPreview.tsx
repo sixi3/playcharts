@@ -3,7 +3,7 @@
 import React, { useRef, useCallback } from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import type { Segment, PieChartStyles, ChartOptions } from '@/app/page';
-import { toPng, toSvg } from 'html-to-image';
+import { toPng } from 'html-to-image';
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import PreviewHeader from '../common/PreviewHeader';
