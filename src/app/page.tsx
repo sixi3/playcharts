@@ -4,6 +4,8 @@ import Header from "@/components/layout/Header";
 import PieChartEditor from "@/components/charts/pie/PieChartEditor";
 import PieChartPreview from "@/components/charts/pie/PieChartPreview";
 import CodePanel from "@/components/shared/CodePanel";
+import BarChartEditor from "@/components/charts/bar/BarChartEditor";
+import BarChartPreview from "@/components/charts/bar/BarChartPreview";
 import React, { useState } from 'react';
 import { Box, Paper } from '@mui/material'; // Import Box and Paper for layout/styling
 
@@ -30,15 +32,50 @@ export interface ChartOptions {
   showLegend?: boolean;
 }
 
+// Bar Chart Types
+export interface BarDataPoint {
+  id: string;
+  label: string;
+  value: number;
+  color: string;
+}
+
+export interface BarChartStyles {
+  orientation: 'horizontal' | 'vertical';
+  barSpacing: number;
+  barWidth: number;
+  isStacked: boolean;
+  showXAxis: boolean;
+  showYAxis: boolean;
+  xAxisLabel: string;
+  yAxisLabel: string;
+  showGrid: boolean;
+  showLegend: boolean;
+  barBorder: boolean;
+  barBorderColor: string;
+  barBorderWidth: number;
+  barCornerRadius: number;
+}
+
 // Function to generate a simple unique ID
 const generateId = () => `_${Math.random().toString(36).substr(2, 9)}`;
 
 export default function Home() {
+  // Add chart type state
+  const [chartType, setChartType] = useState<'pie' | 'bar'>('pie');
+
   // State for the segments
   const [segments, setSegments] = useState<Segment[]>([
     { id: generateId(), label: 'Segment 1', value: 10, color: '#03C171' },
     { id: generateId(), label: 'Segment 2', value: 20, color: '#0068CC' },
-    { id: generateId(), label: 'Segment 3', value: 15, color: '#FF0000' }, // Mismatched color from image, corrected
+    { id: generateId(), label: 'Segment 3', value: 15, color: '#FF0000' },
+  ]);
+
+  // State for bar chart data
+  const [barData, setBarData] = useState<BarDataPoint[]>([
+    { id: generateId(), label: 'Bar 1', value: 10, color: '#03C171' },
+    { id: generateId(), label: 'Bar 2', value: 20, color: '#0068CC' },
+    { id: generateId(), label: 'Bar 3', value: 15, color: '#FF0000' },
   ]);
 
   // State for styling properties
@@ -49,6 +86,24 @@ export default function Home() {
     cornerRadius: 5,
     startAngle: 0,
     endAngle: 360,
+  });
+
+  // State for bar chart styles
+  const [barStyles, setBarStyles] = useState<BarChartStyles>({
+    orientation: 'vertical',
+    barSpacing: 0.2,
+    barWidth: 0.8,
+    isStacked: false,
+    showXAxis: true,
+    showYAxis: true,
+    xAxisLabel: '',
+    yAxisLabel: '',
+    showGrid: true,
+    showLegend: false,
+    barBorder: false,
+    barBorderColor: '#000000',
+    barBorderWidth: 1,
+    barCornerRadius: 0,
   });
 
   // State for other chart options
@@ -86,10 +141,32 @@ export default function Home() {
     setChartOptions(prevOptions => ({ ...prevOptions, ...updatedValues }));
   };
 
+  // --- Bar Chart Handlers ---
+  const addBar = () => {
+    setBarData([
+      ...barData,
+      { id: generateId(), label: `Bar ${barData.length + 1}`, value: 10, color: '#CCCCCC' },
+    ]);
+  };
+
+  const removeBar = (id: string) => {
+    setBarData(barData.filter(bar => bar.id !== id));
+  };
+
+  const updateBar = (id: string, updatedValues: Partial<Omit<BarDataPoint, 'id'>>) => {
+    setBarData(barData.map(bar =>
+      bar.id === id ? { ...bar, ...updatedValues } : bar
+    ));
+  };
+
+  const updateBarStyle = (updatedValues: Partial<BarChartStyles>) => {
+    setBarStyles(prevStyles => ({ ...prevStyles, ...updatedValues }));
+  };
+
   return (
     // Outermost container for full viewport height and padding
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', bgcolor: 'background.default' }}>
-      <Header />
+      <Header chartType={chartType} onChartTypeChange={setChartType} />
       {/* Main content area - Allow scroll on XS, hide on LG */}
       <Box
         component="main"
@@ -101,7 +178,6 @@ export default function Home() {
           p: { xs: 2, sm: 3 },
           overflowX: 'hidden', // Prevent horizontal scroll
           overflowY: { xs: 'auto', lg: 'hidden' } // Allow vertical scroll only on small screens
-          // Remove fixed height calculation, rely on flexGrow
         }}
       >
         {/* Left Column - Adjust height behavior */}
@@ -125,14 +201,33 @@ export default function Home() {
               alignItems: 'center',
               justifyContent: 'center',
               minHeight: { xs: 300, sm: 400 },
-              overflow: 'hidden'
+              width: '100%', // Ensure full width of container
+              maxWidth: '100%', // Prevent growing beyond container
+              overflow: 'hidden', // Hide overflow
+              position: 'relative', // For absolute positioning of scrollable content
+              border: '1px solid', // Ensure consistent border
+              borderColor: 'divider', // Use theme's divider color
+              borderRadius: 2, // Ensure consistent border radius
+              '& > *': { // Target direct children (the chart)
+                width: '100%',
+                maxWidth: '100%',
+                overflowX: 'auto', // Enable horizontal scrolling
+                padding: 2, // Add some padding around the chart
+              }
             }}
           >
-            <PieChartPreview
-              segments={segments}
-              styles={styles}
-              options={chartOptions}
-            />
+            {chartType === 'pie' ? (
+              <PieChartPreview
+                segments={segments}
+                styles={styles}
+                options={chartOptions}
+              />
+            ) : (
+              <BarChartPreview
+                data={barData}
+                styles={barStyles}
+              />
+            )}
           </Paper>
 
           {/* Code Panel */}
@@ -148,16 +243,19 @@ export default function Home() {
             }}
           >
             <CodePanel
+              chartType={chartType}
               segments={segments}
-              styles={styles}
+              pieStyles={styles}
               options={chartOptions}
+              barData={barData}
+              barStyles={barStyles}
             />
           </Paper>
         </Box>
 
         {/* Right Column (Editor Panel) - Adjust height behavior */}
         <Box sx={{
-          flexBasis: { xs: 'auto', lg: '70%' }, // Changed from 34% to 70%
+          flexBasis: { xs: 'auto', lg: '80%' }, // Changed from 70% to 80%
           flexGrow: { lg: 1 }, // Only grow on lg
           height: { lg: '100%' }, // Full height only on lg
           minWidth: 0, // Prevent content from forcing width expansion
@@ -173,16 +271,27 @@ export default function Home() {
               // On xs, the main container scrolls, so internal scroll is less critical
             }}
           >
-            <PieChartEditor
-              segments={segments}
-              styles={styles}
-              options={chartOptions}
-              onAddSegment={addSegment}
-              onRemoveSegment={removeSegment}
-              onUpdateSegment={updateSegment}
-              onUpdateStyle={updateStyle}
-              onUpdateOption={updateChartOption}
-            />
+            {chartType === 'pie' ? (
+              <PieChartEditor
+                segments={segments}
+                styles={styles}
+                options={chartOptions}
+                onAddSegment={addSegment}
+                onRemoveSegment={removeSegment}
+                onUpdateSegment={updateSegment}
+                onUpdateStyle={updateStyle}
+                onUpdateOption={updateChartOption}
+              />
+            ) : (
+              <BarChartEditor
+                data={barData}
+                styles={barStyles}
+                onAddBar={addBar}
+                onRemoveBar={removeBar}
+                onUpdateBar={updateBar}
+                onUpdateStyle={updateBarStyle}
+              />
+            )}
           </Paper>
         </Box>
       </Box>

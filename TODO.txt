@@ -36,7 +36,7 @@
      - [x] Create src/components/charts/pie/PieChartPreview.tsx.
      - [x] Render the Pie Chart with the updated props from the Editor state.
      - [x] Confirm real-time reactivity (onChange => re-render).
-     - [ ] Consider theming (use MUI theme or custom styling).
+     - [x] Consider theming (use MUI theme or custom styling).
     Notes: If using MUI X-Charts PieChart, import from '@mui/x-charts/PieChart'.
     Comments: Implemented PieChartPreview component using @mui/x-charts and linked it to state in page.tsx.
 
@@ -88,3 +88,171 @@
      - [x] Refine Code Panel (Code Area, Buttons)
      - [x] Final Review & Tweaks
     Comments: Target: https://www.figma.com/design/U8ByWXJ8HT1Xm0Dg0Y4vF1/Design2Charts?node-id=1-2
+
+[x] TASK: Refactor State Management for Multiple Chart Types
+    Description:
+     - [x] Introduce state in page.tsx (or context) to track the currently selected chart type (e.g., 'pie', 'bar').
+     - [x] Update existing state (data, styles, options) to be potentially structured per chart type if needed.
+    Notes: Consider how shared state vs. type-specific state will be managed.
+    Comments:
+
+[x] TASK: Implement Chart Type Selector in Header
+    Description:
+     - [x] Add a Dropdown/Select component to the right side of the Header.
+     - [x] Populate it with available chart types (initially 'Pie Chart', 'Bar Chart').
+     - [x] Link its value to the chart type state.
+    Notes: Use MUI Select or a similar component.
+    Comments:
+
+[x] TASK: Define Bar Chart Data & Styling Structures
+    Description:
+     - [x] Define interfaces for Bar Chart:
+       1) BarDataPoint: { id, label, value, color }
+       2) BarChartStyles: {
+          orientation: 'horizontal' | 'vertical',
+          barSpacing: number,
+          barWidth: number,
+          isStacked: boolean,
+          showXAxis: boolean,
+          showYAxis: boolean,
+          xAxisLabel: string,
+          yAxisLabel: string,
+          showGrid: boolean,
+          showLegend: boolean,
+          barBorder: boolean,
+          barBorderColor: string,
+          barBorderWidth: number,
+          barCornerRadius: number
+        }
+    Notes: Create these in a relevant types file or within page.tsx initially.
+    Comments: Implemented in page.tsx
+
+[x] TASK: Build Bar Chart Data Management UI (BarChartEditor)
+    Description:
+     - [x] Create `src/components/charts/bar/BarChartEditor.tsx`
+     - [x] Implement Add/Remove Bar buttons
+     - [x] For each bar, create a row with:
+       1) Label input (TextField)
+       2) Value input (TextField with number validation)
+       3) Color picker (MUI ColorPicker)
+       4) Delete button (IconButton)
+     - [x] Add validation for numeric inputs
+     - [x] Implement state management for bar data
+    Notes: Reuse structure/components from PieChartEditor where applicable.
+    Comments: Implemented with all data management controls
+
+[x] TASK: Build Bar Chart Layout Controls
+    Description:
+     - [x] Add layout controls section to BarChartEditor:
+       1) Orientation toggle (Switch with Horizontal/Vertical labels)
+       2) Bar spacing slider (MUI Slider with min/max values)
+       3) Bar width slider (MUI Slider with min/max values)
+       4) Stacked/Grouped toggle (Switch)
+     - [x] Implement state management for layout options
+     - [x] Add real-time preview updates
+    Notes: Use MUI components for consistent styling.
+    Comments: Implemented with all layout controls
+
+[x] TASK: Build Bar Chart Axis Controls
+    Description:
+     - [x] Add axis controls section to BarChartEditor:
+       1) Show/Hide X-axis toggle (Switch)
+       2) Show/Hide Y-axis toggle (Switch)
+       3) X-axis label input (TextField)
+       4) Y-axis label input (TextField)
+     - [x] Implement state management for axis options
+     - [x] Add real-time preview updates
+    Notes: Ensure axis labels update dynamically.
+    Comments: Implemented with all axis controls
+
+[x] TASK: Build Bar Chart Grid & Legend Controls
+    Description:
+     - [x] Add grid and legend controls section to BarChartEditor:
+       1) Show/Hide grid toggle (Switch)
+       2) Show/Hide legend toggle (Switch)
+     - [x] Implement state management for grid and legend options
+     - [x] Add real-time preview updates
+    Notes: Ensure grid and legend visibility updates immediately.
+    Comments: Implemented with all grid and legend controls
+
+[x] TASK: Build Bar Chart Styling Controls
+    Description:
+     - [x] Add bar styling controls section to BarChartEditor:
+       1) Bar border toggle (Switch)
+       2) Bar border color picker (MUI ColorPicker)
+       3) Bar border width slider (MUI Slider)
+       4) Bar corner radius slider (MUI Slider)
+     - [x] Implement state management for styling options
+     - [x] Add real-time preview updates
+    Notes: Ensure all styling changes are reflected immediately.
+    Comments: Implemented with all styling controls
+
+[x] TASK: Create BarChartPreview Component
+    Description:
+     - [x] Create `src/components/charts/bar/BarChartPreview.tsx`
+     - [x] Implement MUI X-Charts BarChart with all configured options:
+       1) Data points from barData
+       2) Layout options (orientation, spacing, width)
+       3) Axis visibility and labels
+       4) Grid visibility
+       5) Legend visibility
+       6) Bar styling (border, corner radius)
+     - [x] Ensure real-time updates with state changes
+     - [x] Handle horizontal/vertical layout switching
+     - [x] Implement stacked bars when enabled
+    Notes: Use @mui/x-charts/BarChart component.
+    Comments: Implemented BarChartPreview component using @mui/x-charts and linked it to state in page.tsx.
+
+[x] TASK: Generate Bar Chart Code Snippet Utility
+    Description:
+     - [x] Create `src/utils/bar/generateBarChartCode.ts`
+     - [x] Implement code generation for:
+       1) Data structure
+       2) Layout configuration
+       3) Axis configuration
+       4) Grid and legend settings
+       5) Bar styling
+     - [x] Ensure generated code matches current state
+    Notes: Mirror the structure of generatePieChartCode.ts.
+    Comments: Implemented and integrated with CodePanel.
+
+[x] TASK: Update CodePanel for Bar Chart
+    Description:
+     - [x] Modify CodePanel.tsx to handle Bar Chart code generation
+     - [x] Add conditional rendering based on chart type
+     - [x] Update copy/download functionality for Bar Chart
+     - [x] Ensure proper syntax highlighting
+    Notes: Keep existing pie chart functionality intact.
+    Comments: Implemented with full support for both pie and bar charts.
+
+[ ] TASK: Bar Chart Testing & QA
+    Description:
+     - [ ] Test all controls individually:
+       1) Data management (add/remove/edit bars)
+       2) Layout controls (orientation, spacing, width)
+       3) Axis controls (visibility, labels)
+       4) Grid and legend controls
+       5) Bar styling controls
+     - [ ] Test state management and updates
+       6) Test code generation
+     - [ ] Test responsive behavior
+    Notes: Document any issues or edge cases.
+    Comments:
+
+[ ] TASK: Final Integration Testing
+    Description:
+     - [ ] Test switching between chart types
+     - [ ] Verify all state is properly maintained when switching
+     - [ ] Test code generation for both chart types
+     - [ ] Verify responsive design across different screen sizes
+    Notes: Ensure smooth transitions between chart types.
+    Comments:
+
+[ ] TASK: Documentation & Deployment
+    Description:
+     - [ ] Create README.md with setup instructions
+     - [ ] Document available chart types and features
+     - [ ] Add usage examples
+     - [ ] Prepare for deployment
+    Notes: Include screenshots and GIFs if possible.
+    Comments:

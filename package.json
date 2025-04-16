@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -14,10 +14,13 @@
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
     "@mui/x-charts": "^7.28.0",
+    "@types/react-color": "^3.0.13",
     "copy-to-clipboard": "^3.3.3",
     "html-to-image": "^1.11.13",
     "next": "15.2.5",
     "react": "^19.0.0",
+    "react-aria-components": "^1.8.0",
+    "react-color": "^2.19.3",
     "react-dom": "^19.0.0",
     "react-syntax-highlighter": "^15.6.1",
     "recharts": "^2.15.2"
