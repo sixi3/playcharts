@@ -5,7 +5,6 @@ import {
   TextField,
   IconButton,
   Typography,
-  Paper,
   Slider,
   FormControlLabel,
   Switch,

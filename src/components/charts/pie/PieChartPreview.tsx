@@ -5,7 +5,6 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import type { Segment, PieChartStyles, ChartOptions } from '@/app/page';
 import { toPng } from 'html-to-image';
 import { Box } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import PreviewHeader from '../common/PreviewHeader';
 
 interface PieChartPreviewProps {
@@ -16,7 +15,6 @@ interface PieChartPreviewProps {
 
 const PieChartPreview: React.FC<PieChartPreviewProps> = ({ segments, styles, options }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
-  const theme = useTheme();
 
   // Ensure segments are valid before rendering
   const validSegments = segments.filter(s => s.value > 0);
